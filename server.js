@@ -7,24 +7,32 @@ const students = [
     {
         name: "Protik"
     }
-]
+];
+
+const sendResponse = (res, { contentType = "application/json", status = 200, body = {} }) => {
+    res.writeHead(status, { 'Content-Type': contentType })
+    res.write(JSON.stringify(body))
+    res.end();
+}
 
 const server = http.createServer((req, res) => {
     // console.log(req.url);
-    if(req.url === '/') {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.write(JSON.stringify({ message: "Successful" }))
-        res.end();
-    }else if(req.url === '/student') {
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.write(JSON.stringify(students))
-        res.end();
+    if (req.url === '/') {
+        sendResponse(res, {
+            body: {
+                message: "Successful"
+            }
+        })
+    } else if (req.url === '/student') {
+        sendResponse(res, {
+            body: students
+        })
     }
-    
     else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.write(JSON.stringify({ message: "Resource not found" }));
-        res.end();
+        sendResponse(res, {
+            status: 404,
+            body: { message: "Resource not found" }
+        })
     }
 });
 
