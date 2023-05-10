@@ -40,6 +40,8 @@ const server = http.createServer((req, res) => {
         //event ending
         req.on("end", () => {
             console.log('Data from post method', body);
+            const payload = JSON.parse(body)
+            students.push(payload)
             sendResponse(res, { status: 201, body: { message: body } })
         })
     }
